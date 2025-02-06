@@ -1,7 +1,7 @@
 <!-- ======= Footer ======= -->
 <footer id="footer" class="footer">
   <div class="copyright">
-    &copy; Copyright <strong><span>UKK KASIR</span></strong>. All Rights Reserved
+    &copy; Copyright <strong><span>Coffee Shop</span></strong>. All Rights Reserved
   </div>
 </footer><!-- End Footer -->
 
