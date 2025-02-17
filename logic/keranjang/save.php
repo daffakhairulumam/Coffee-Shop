@@ -13,7 +13,7 @@ $Daffa_data = [
 ];
 
 if (saveKeranjang($Daffa_data)) {
-    header("Location:../../index_kasir.php?page=transaksi&alert=berhasil&kode_barang=$Daffa_kodeMenu");
+    header("Location:../../index_kasir.php?page=transaksi&alert=berhasil&kode_menu=$Daffa_kodeMenu");
 } else {
     header("Location:../../index_kasir.php?page=transaksi&alert=gagal");
 }
