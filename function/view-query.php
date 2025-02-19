@@ -21,22 +21,28 @@ function getUser($current_user_role, $current_user_id)
     return $result;
 }
 
-function getAktfitas($user_role, $user_id = null)
+function getAktifitas($user_role, $user_id = null)
 {
     $conn = connection();
 
     if ($user_role === 'Super Admin') {
-        $query = "SELECT log_aktifitas.id_log, log_aktifitas.id_user, log_aktifitas.login, log_aktifitas.logout, tuser.username FROM log_aktifitas INNER JOIN tuser ON log_aktifitas.id_user = tuser.id_user";
+        $query = "SELECT log_aktifitas.id_log, log_aktifitas.id_user, log_aktifitas.login, log_aktifitas.logout, tuser.username FROM log_aktifitas INNER JOIN tuser ON log_aktifitas.id_user = tuser.id_user ORDER BY log_aktifitas.login DESC";
     } elseif ($user_role === 'Manajer') {
-        $query = "SELECT log_aktifitas.id_log, log_aktifitas.id_user, log_aktifitas.login, log_aktifitas.logout, tuser.username FROM log_aktifitas INNER JOIN tuser ON log_aktifitas.id_user = tuser.id_user WHERE tuser.hak = 'Kasir'";
+        $query = "SELECT log_aktifitas.id_log, log_aktifitas.id_user, log_aktifitas.login, log_aktifitas.logout, tuser.username FROM log_aktifitas INNER JOIN tuser ON log_aktifitas.id_user = tuser.id_user WHERE tuser.hak = 'Kasir' ORDER BY log_aktifitas.login DESC";
     } else {
-        $query = "SELECT log_aktifitas.id_log, log_aktifitas.id_user, log_aktifitas.login, log_aktifitas.logout, tuser.username FROM log_aktifitas INNER JOIN tuser ON log_aktifitas.id_user = tuser.id_user WHERE log_aktifitas.id_user = '$user_id'";
+        $query = "SELECT log_aktifitas.id_log, log_aktifitas.id_user, log_aktifitas.login, log_aktifitas.logout, tuser.username FROM log_aktifitas INNER JOIN tuser ON log_aktifitas.id_user = tuser.id_user WHERE log_aktifitas.id_user = '$user_id' ORDER BY log_aktifitas.login DESC";
     }
 
     $result = mysqli_query($conn, $query);
-    return $result;
-}
 
+    // Konversi hasil query ke array asosiatif
+    $data = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+
+    return $data;
+}
 
 function genereteCodeKategori()
 {

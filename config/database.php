@@ -5,7 +5,7 @@ function connection()
     $host = "localhost";
     $username = "root";
     $password = "";
-    $database = "daffa_khairul_ukk_kasir";
+    $database = "coffee_shop";
 
     $conn = mysqli_connect($host, $username, $password, $database);
 

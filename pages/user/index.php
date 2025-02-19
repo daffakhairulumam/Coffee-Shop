@@ -7,7 +7,7 @@ $data = getUser($_SESSION['hak'], $_SESSION['id_user']);
 <main id="main" class="main">
 
     <div class="pagetitle">
-        <h1>Foto</h1>
+        <h1>Users</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.php">Home</a></li>
