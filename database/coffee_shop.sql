@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 26, 2024 at 01:05 AM
+-- Generation Time: Feb 26, 2025 at 05:10 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `daffa_khairul_ukk_kasir`
+-- Database: `coffee_shop`
 --
 
 -- --------------------------------------------------------
@@ -137,6 +137,7 @@ CREATE TABLE `th_transaksi` (
   `id_user` int(11) NOT NULL,
   `total_bayar` int(11) NOT NULL,
   `jumlah_bayar` int(11) NOT NULL,
+  `jenis_pesanan` enum('Dine In','Take Away','','') NOT NULL,
   `tgl_transaksi` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -144,20 +145,20 @@ CREATE TABLE `th_transaksi` (
 -- Dumping data for table `th_transaksi`
 --
 
-INSERT INTO `th_transaksi` (`id_transaksi`, `id_meja`, `id_user`, `total_bayar`, `jumlah_bayar`, `tgl_transaksi`) VALUES
-('TRX001', 15, 40, 25000, 30000, '2024-11-22'),
-('TRX002', 17, 41, 50000, 100000, '2024-11-22'),
-('TRX003', 15, 40, 25000, 30000, '2024-11-22'),
-('TRX004', 17, 41, 50000, 100000, '2024-11-22'),
-('TRX005', 15, 40, 40000, 50000, '2024-11-25'),
-('TRX006', 17, 40, 15000, 30000, '2024-11-25'),
-('TRX007', 15, 40, 15000, 30000, '2024-11-25'),
-('TRX008', 17, 41, 35000, 50000, '2024-11-25'),
-('TRX009', 15, 40, 25000, 30000, '2024-11-25'),
-('TRX010', 15, 40, 10000, 15000, '2024-11-25'),
-('TRX011', 17, 41, 5000, 10000, '2024-11-25'),
-('TRX012', 15, 41, 5000, 10000, '2024-11-25'),
-('TRX013', 18, 40, 27000, 30000, '2024-11-25');
+INSERT INTO `th_transaksi` (`id_transaksi`, `id_meja`, `id_user`, `total_bayar`, `jumlah_bayar`, `jenis_pesanan`, `tgl_transaksi`) VALUES
+('TRX001', 15, 40, 25000, 30000, 'Dine In', '2024-11-22'),
+('TRX002', 17, 41, 50000, 100000, 'Dine In', '2024-11-22'),
+('TRX003', 15, 40, 25000, 30000, 'Dine In', '2024-11-22'),
+('TRX004', 17, 41, 50000, 100000, 'Dine In', '2024-11-22'),
+('TRX005', 15, 40, 40000, 50000, 'Dine In', '2024-11-25'),
+('TRX006', 17, 40, 15000, 30000, 'Dine In', '2024-11-25'),
+('TRX007', 15, 40, 15000, 30000, 'Dine In', '2024-11-25'),
+('TRX008', 17, 41, 35000, 50000, 'Dine In', '2024-11-25'),
+('TRX009', 15, 40, 25000, 30000, 'Dine In', '2024-11-25'),
+('TRX010', 15, 40, 10000, 15000, 'Dine In', '2024-11-25'),
+('TRX011', 17, 41, 5000, 10000, 'Dine In', '2024-11-25'),
+('TRX012', 15, 41, 5000, 10000, 'Dine In', '2024-11-25'),
+('TRX013', 18, 40, 27000, 30000, 'Dine In', '2024-11-25');
 
 -- --------------------------------------------------------
 
@@ -198,7 +199,8 @@ CREATE TABLE `tkeranjang` (
 --
 
 INSERT INTO `tkeranjang` (`id`, `id_transaksi`, `kode_menu`, `qty`, `total`) VALUES
-(101, 'TRX005', 'MNU002', 2, 10000);
+(101, 'TRX005', 'MNU002', 2, 10000),
+(121, 'TRX014', 'MNU001', 1, 15000);
 
 -- --------------------------------------------------------
 
@@ -271,7 +273,7 @@ CREATE TABLE `t_menu` (
 --
 
 INSERT INTO `t_menu` (`id_menu`, `kode_menu`, `gambar`, `nama_menu`, `id_kategori`, `deskripsi`, `stock`, `harga`) VALUES
-(42, 'MNU001', '549115672_lemon tea.jpg', 'Lemon Tea Ice', 25, 'Segar', 15, 15000),
+(42, 'MNU001', '549115672_lemon tea.jpg', 'Lemon Tea Ice', 25, 'Segar', 14, 15000),
 (45, 'MNU002', '1494697499_americano ice.jpg', 'Americano Ice', 25, 'Halal', 29, 27000),
 (46, 'MNU003', '1066689157_nasi goreng.jpg', 'Nasi Goreng', 24, 'Bikin Kenyang', 15, 25000),
 (47, 'MNU004', '249737716_burger.jpg', 'Chicken Burger', 24, 'Halal', 30, 30000),
@@ -361,7 +363,7 @@ ALTER TABLE `tkategori`
 -- AUTO_INCREMENT for table `tkeranjang`
 --
 ALTER TABLE `tkeranjang`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
 -- AUTO_INCREMENT for table `tuser`

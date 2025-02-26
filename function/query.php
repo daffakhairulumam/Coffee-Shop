@@ -362,15 +362,40 @@ function saveTransaksi($Daffa_data)
     $Daffa_conn = connection();
 
     $Daffa_idTransaksi = $Daffa_data['id_transaksi'];
-    $Daffa_idMeja = $Daffa_data['id_meja'];
     $Daffa_idUser = $Daffa_data['id_user'];
     $Daffa_total = $_POST['total'];
     $Daffa_bayar = $_POST['bayar'];
+    $Daffa_jenisPesanan = $_POST['jenis_pesanan'];
 
+    // Dapatkan keranjang terlebih dahulu
     $Daffa_keranjangQuery = "SELECT * FROM tkeranjang WHERE id_transaksi = '$Daffa_idTransaksi'";
     $Daffa_resultKeranjang = mysqli_query($Daffa_conn, $Daffa_keranjangQuery);
 
-    $Daffa_queryTransaksi = "INSERT INTO th_transaksi (id_transaksi, id_meja, id_user, total_bayar, jumlah_bayar, tgl_transaksi) VALUES ('$Daffa_idTransaksi', '$Daffa_idMeja', '$Daffa_idUser', '$Daffa_total', '$Daffa_bayar', now())";
+    // Periksa jenis pesanan
+    if ($Daffa_jenisPesanan == 'Take Away') {
+        // Untuk Take Away, kita butuh ID meja dummy dari database
+        // Kita bisa menggunakan meja yang tersedia pertama atau membuat meja khusus untuk Take Away
+        // Ambil satu meja yang tersedia (ini hanya untuk memenuhi foreign key constraint)
+        $Daffa_queryFindMeja = "SELECT id_meja FROM t_meja WHERE status = 'Tersedia' LIMIT 1";
+        $Daffa_resultMeja = mysqli_query($Daffa_conn, $Daffa_queryFindMeja);
+
+        if (mysqli_num_rows($Daffa_resultMeja) > 0) {
+            $Daffa_meja = mysqli_fetch_assoc($Daffa_resultMeja);
+            $Daffa_idMeja = $Daffa_meja['id_meja'];
+        } else {
+            // Jika tidak ada meja tersedia, gunakan ID meja yang valid dari database
+            $Daffa_queryAnyMeja = "SELECT id_meja FROM t_meja LIMIT 1";
+            $Daffa_resultAnyMeja = mysqli_query($Daffa_conn, $Daffa_queryAnyMeja);
+            $Daffa_anyMeja = mysqli_fetch_assoc($Daffa_resultAnyMeja);
+            $Daffa_idMeja = $Daffa_anyMeja['id_meja'];
+        }
+    } else {
+        // Untuk Dine In, gunakan ID meja yang dipilih
+        $Daffa_idMeja = $Daffa_data['id_meja'];
+    }
+
+    // Insert ke tabel transaksi
+    $Daffa_queryTransaksi = "INSERT INTO th_transaksi (id_transaksi, id_meja, id_user, total_bayar, jumlah_bayar, jenis_pesanan, tgl_transaksi) VALUES ('$Daffa_idTransaksi', '$Daffa_idMeja', '$Daffa_idUser', '$Daffa_total', '$Daffa_bayar', '$Daffa_jenisPesanan', now())";
     $Daffa_resultTransaksi = mysqli_query($Daffa_conn, $Daffa_queryTransaksi);
 
     if (!$Daffa_resultTransaksi) {
@@ -409,11 +434,11 @@ function saveTransaksi($Daffa_data)
         }
     }
 
-    if ($Daffa_allSuccess) {
+    // Hanya update status meja jika pesanan Dine In
+    if ($Daffa_allSuccess && $Daffa_jenisPesanan == 'Dine In') {
         $Daffa_updateMejaQuery = "UPDATE t_meja SET status = 'Tidak Tersedia' WHERE id_meja = '$Daffa_idMeja'";
         mysqli_query($Daffa_conn, $Daffa_updateMejaQuery);
-        return true;
     }
 
-    return false;
+    return $Daffa_allSuccess;
 }

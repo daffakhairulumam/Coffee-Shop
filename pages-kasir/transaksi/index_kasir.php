@@ -275,8 +275,19 @@ if (isset($_GET['kode_menu'])) {
                     <form action="logic/transaksi/save.php" method="POST" id="payment-form">
                         <div class="form-group mb-3">
                             <div class="input-group">
+                                <label class="input-group-text">Jenis Pesanan</label>
+                                <select class="form-select" id="jenis_pesanan" name="jenis_pesanan" required onchange="toggleMejaSelection()">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="Dine In">Dine In</option>
+                                    <option value="Take Away">Take Away</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3" id="meja_selection">
+                            <div class="input-group">
                                 <label class="input-group-text">Nomor Meja</label>
-                                <select class="form-select" id="nomor_meja" name="id_meja" required>
+                                <select class="form-select" id="nomor_meja" name="id_meja">
                                     <option value="">-- Pilih --</option>
                                     <?php foreach ($dataMeja as $value) : ?>
                                         <option value="<?= $value['id_meja'] ?>"
@@ -312,6 +323,7 @@ if (isset($_GET['kode_menu'])) {
         </div>
     </div>
     <!-- End Modal Bayar -->
+
 
     <!-- Modal Cetak Struk -->
     <div class="modal fade" id="cetakStrukModal" tabindex="-1">
@@ -351,6 +363,9 @@ if (isset($_GET['kode_menu'])) {
             showCetakStrukModal(idTransaksi);
         }
 
+        // Hide meja selection initially
+        $('#meja_selection').hide();
+
         // Hapus parameter alert ketika modal ditutup
         $('#cetakStrukModal').on('hidden.bs.modal', function() {
             removeUrlParameter('alert');
@@ -368,24 +383,44 @@ if (isset($_GET['kode_menu'])) {
         });
     });
 
+    function toggleMejaSelection() {
+        var jenisPesanan = $('#jenis_pesanan').val();
+
+        if (jenisPesanan === 'Dine In') {
+            $('#meja_selection').show();
+            $('#nomor_meja').prop('required', true);
+        } else {
+            $('#meja_selection').hide();
+            $('#nomor_meja').prop('required', false);
+            $('#nomor_meja').val('');
+        }
+    }
+
     function showCetakStrukModal(idTransaksi) {
         $('#cetakStrukLink').attr('href', 'logic/transaksi/cetak.php?id_transaksi=' + idTransaksi);
         $('#cetakStrukModal').modal('show');
     }
 
     function validatePaymentForm() {
+        var jenisPesanan = $('#jenis_pesanan').val();
         var nomor_meja = $('#nomor_meja').val();
         var errorMessages = [];
 
         $('.payment-alert').remove();
 
-        if (!nomor_meja) {
-            errorMessages.push("Silakan pilih nomor meja yang tersedia terlebih dahulu!");
+        if (!jenisPesanan) {
+            errorMessages.push("Silakan pilih jenis pesanan terlebih dahulu!");
         }
 
-        var selectedOption = $('#nomor_meja option:selected');
-        if (selectedOption.is(':disabled')) {
-            errorMessages.push("Meja yang dipilih tidak tersedia!");
+        if (jenisPesanan === 'Dine In') {
+            if (!nomor_meja) {
+                errorMessages.push("Silakan pilih nomor meja yang tersedia terlebih dahulu!");
+            }
+
+            var selectedOption = $('#nomor_meja option:selected');
+            if (selectedOption.is(':disabled')) {
+                errorMessages.push("Meja yang dipilih tidak tersedia!");
+            }
         }
 
         if (errorMessages.length > 0) {
@@ -406,70 +441,6 @@ if (isset($_GET['kode_menu'])) {
         $('#modalQty').modal('show');
         $('#id').val(id);
     }
-
-    // function kembalian() {
-    //     var bayar = parseFloat($('#bayar').val()) || 0;
-    //     var total = parseFloat($('#total').val());
-
-    //     // Validasi pembayaran harus lebih besar atau sama dengan total
-    //     if (bayar < total) {
-    //         $('#kembalian').val('');
-    //         // alert('Pembayaran harus lebih besar atau sama dengan total belanja!');
-    //         return false;
-    //     }
-
-    //     var kembalian = bayar - total;
-    //     $('#kembalian').val(kembalian);
-    // }
-
-    // function bayar() {
-    //     var bayar = parseFloat($('#bayar').val()) || 0;
-    //     var total = parseFloat($('#total').val());
-    //     var idTransaksi = $('#id_transaksi').val();
-    //     var idUser = $('#id_user').val();
-    //     var kembalian = bayar - total;
-
-    //     // Validasi dasar
-    //     if (total <= 0) {
-    //         alert('Total Belanja Harus Lebih Besar dari 0');
-    //         return false;
-    //     }
-
-    //     if (bayar <= 0) {
-    //         alert('Masukkan jumlah pembayaran');
-    //         return false;
-    //     }
-
-    //     // Validasi pembayaran harus cukup
-    //     if (bayar < total) {
-    //         alert('Pembayaran kurang dari total belanja');
-    //         return false;
-    //     }
-
-    //     // Show modal dan set nilai
-    //     $('#modalBayar').modal('show');
-
-    //     // Reset peringatan sebelumnya
-    //     $('.payment-alert').remove();
-
-    //     // Set nilai form
-    //     $('#id_transaksi2').val(idTransaksi);
-    //     $('#id_user').val(idUser);
-    //     $('#total2').val(total);
-    //     $('#bayar2').val(bayar);
-    //     $('#kembalian2').val(kembalian);
-
-    //     // Handler submit form
-    //     $('#payment-form').off('submit').on('submit', function(e) {
-    //         e.preventDefault();
-
-    //         if (!validatePaymentForm()) {
-    //             return false;
-    //         }
-
-    //         this.submit();
-    //     });
-    // }
 
     function kembalian() {
         var bayar = $('#bayar').val();
