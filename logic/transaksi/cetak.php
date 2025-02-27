@@ -49,11 +49,11 @@ $pdf->Cell(0, 3, 'Tanggal Transaksi : ' . $Daffa_tgl_transaksi, 0, 1, 'L');
 if (strtolower($Daffa_jenis_pesanan) == 'take away' || strtolower($Daffa_jenis_pesanan) == 'takeaway') {
     $pdf->Cell(0, 3, 'Jenis Pesanan : Take Away', 0, 1, 'L');
 } else {
-    $pdf->Cell(0, 3, 'Nomor Meja : ' . $Daffa_nomor_meja, 0, 1, 'L');
     $pdf->Cell(0, 3, 'Jenis Pesanan : Dine In', 0, 1, 'L');
+    $pdf->Cell(0, 3, 'Nomor Meja : ' . $Daffa_nomor_meja, 0, 1, 'L');
 }
 
-$pdf->Cell(0, 3, 'Nama : ' . $Daffa_nama_user, 0, 1, 'L');
+$pdf->Cell(0, 3, 'Nama Kasir: ' . $Daffa_nama_user, 0, 1, 'L');
 
 $pdf->SetFont('Arial', 'B', 5);
 $pdf->Cell(10, 3, 'No.', 0, 0, 'C');

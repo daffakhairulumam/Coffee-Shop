@@ -18,7 +18,8 @@ $Daffa_query = "SELECT td_transaksi.*, tuser.nama_user, t_menu.kode_menu, t_menu
 
 $Daffa_data = mysqli_query($Daffa_conn, $Daffa_query);
 
-$Daffa_queryTransaksi = "SELECT th_transaksi.id_transaksi, th_transaksi.total_bayar, th_transaksi.jumlah_bayar, th_transaksi.tgl_transaksi, t_meja.nomor_meja, tuser.nama_user FROM th_transaksi th_transaksi INNER JOIN t_meja t_meja ON th_transaksi.id_meja = t_meja.id_meja INNER JOIN tuser tuser ON th_transaksi.id_user = tuser.id_user WHERE th_transaksi.id_transaksi = '$Daffa_id_transaksi'";
+// Tambahkan jenis_pesanan pada query untuk mendapatkan informasi tipe pesanan
+$Daffa_queryTransaksi = "SELECT th_transaksi.id_transaksi, th_transaksi.total_bayar, th_transaksi.jumlah_bayar, th_transaksi.tgl_transaksi, th_transaksi.jenis_pesanan, t_meja.nomor_meja, tuser.nama_user FROM th_transaksi th_transaksi INNER JOIN t_meja t_meja ON th_transaksi.id_meja = t_meja.id_meja INNER JOIN tuser tuser ON th_transaksi.id_user = tuser.id_user WHERE th_transaksi.id_transaksi = '$Daffa_id_transaksi'";
 
 $Daffa_result = mysqli_query($Daffa_conn, $Daffa_queryTransaksi);
 $Daffa_dataTransaksi = mysqli_fetch_array($Daffa_result);
@@ -38,7 +39,15 @@ $pdf->Cell(0, 10, 'Detail Laporan Transaksi', 0, 1, 'C');
 $pdf->SetFont('Arial', 'B', 12);
 $pdf->Cell(0, 10, 'Id Transaksi : ' . $Daffa_dataTransaksi['id_transaksi'], 0, 1, 'L');
 $pdf->Cell(0, 10, 'Tanggal Transaksi : ' . $Daffa_dataTransaksi['tgl_transaksi'], 0, 1, 'L');
-$pdf->Cell(0, 10, 'Nomor Meja : ' . $Daffa_dataTransaksi['nomor_meja'], 0, 1, 'L');
+
+// Menampilkan jenis pesanan dengan kondisi
+if ($Daffa_dataTransaksi['jenis_pesanan'] == 'Take Away') {
+    $pdf->Cell(0, 10, 'Jenis Pesanan : Take Away', 0, 1, 'L');
+} else {
+    $pdf->Cell(0, 10, 'Jenis Pesanan : Dine In', 0, 1, 'L');
+    $pdf->Cell(0, 10, 'Nomor Meja : ' . $Daffa_dataTransaksi['nomor_meja'], 0, 1, 'L');
+}
+
 $pdf->Cell(0, 10, 'Nama Kasir : ' . $Daffa_nama_user, 0, 1, 'L');
 
 $pdf->SetFont('Arial', 'B', 12);

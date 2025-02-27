@@ -366,6 +366,8 @@ if (isset($_GET['kode_menu'])) {
         // Hide meja selection initially
         $('#meja_selection').hide();
 
+        toggleMejaSelection();
+
         // Hapus parameter alert ketika modal ditutup
         $('#cetakStrukModal').on('hidden.bs.modal', function() {
             removeUrlParameter('alert');
@@ -389,10 +391,22 @@ if (isset($_GET['kode_menu'])) {
         if (jenisPesanan === 'Dine In') {
             $('#meja_selection').show();
             $('#nomor_meja').prop('required', true);
+
+            // Hide the Take Away option when Dine In is selected
+            $('#nomor_meja option').each(function() {
+                if ($(this).text().includes('Take Away')) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
         } else {
             $('#meja_selection').hide();
             $('#nomor_meja').prop('required', false);
             $('#nomor_meja').val('');
+
+            // Show all options when not in Dine In mode
+            $('#nomor_meja option').show();
         }
     }
 
