@@ -129,7 +129,7 @@ function getMenu($id = null)
 function getMeja()
 {
     $conn = connection();
-    $query = "SELECT * FROM t_meja ORDER BY nomor_meja ASC";
+    $query = "SELECT * FROM t_meja WHERE keterangan != 'Take Away' ORDER BY nomor_meja ASC";
     $result = mysqli_query($conn, $query);
     $data = [];
 

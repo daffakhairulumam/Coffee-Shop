@@ -2,7 +2,7 @@
 
 include('function/view-query.php');
 
-$data = getMeja();
+$Daffa_data = getMeja();
 
 ?>
 <main id="main" class="main">
@@ -79,18 +79,22 @@ $data = getMeja();
                             </thead>
                             <tbody>
                                 <?php
-
-                                foreach ($data as $key => $value) { ?>
+                                foreach ($Daffa_data as $Daffa_key => $Daffa_value) {
+                                    // Skip rows with keterangan "Take Away"
+                                    if ($Daffa_value['keterangan'] == 'Take Away') {
+                                        continue;
+                                    }
+                                ?>
                                     <tr>
-                                        <td><?= $key + 1 ?></td>
-                                        <td><?= $value['nomor_meja'] ?></td>
-                                        <td><?= $value['keterangan'] ?></td>
+                                        <td><?= $Daffa_key + 1 ?></td>
+                                        <td><?= $Daffa_value['nomor_meja'] ?></td>
+                                        <td><?= $Daffa_value['keterangan'] ?></td>
                                         <td>
                                             <?php
-                                            if ($value['status'] == 'Tersedia') { ?>
-                                                <span class="badge bg-success"><?= $value['status'] ?></span>
+                                            if ($Daffa_value['status'] == 'Tersedia') { ?>
+                                                <span class="badge bg-success"><?= $Daffa_value['status'] ?></span>
                                             <?php } else { ?>
-                                                <span class="badge bg-danger"><?= $value['status'] ?></span>
+                                                <span class="badge bg-danger"><?= $Daffa_value['status'] ?></span>
                                             <?php } ?>
                                         </td>
                                         <td>

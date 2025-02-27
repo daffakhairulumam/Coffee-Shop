@@ -63,16 +63,20 @@ $Daffa_data = getMeja();
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Kode Kategori</th>
-                                    <th>Nama Kategori</th>
+                                    <th>Nomor Meja</th>
+                                    <th>Keterangan</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-
-                                foreach ($Daffa_data as $Daffa_key => $Daffa_value) { ?>
+                                foreach ($Daffa_data as $Daffa_key => $Daffa_value) {
+                                    // Skip rows with keterangan "Take Away"
+                                    if ($Daffa_value['keterangan'] == 'Take Away') {
+                                        continue;
+                                    }
+                                ?>
                                     <tr>
                                         <td><?= $Daffa_key + 1 ?></td>
                                         <td><?= $Daffa_value['nomor_meja'] ?></td>
