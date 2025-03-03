@@ -38,6 +38,10 @@ $data = getTransaksi();
                                 <label class="form-label">&nbsp;</label>
                                 <button id="resetFilter" class="btn btn-secondary form-control">Reset Filter</button>
                             </div>
+                            <div class="col-md-3">
+                                <label class="form-label">&nbsp;</label>
+                                <a href="#" id="exportExcel" class="btn btn-success form-control">Cetak Excel</a>
+                            </div>
                         </div>
 
                         <!-- Table with stripped rows -->
@@ -158,5 +162,42 @@ $data = getTransaksi();
             $('#max').val('');
             table.draw();
         });
+
+        $('#exportExcel').on('click', function(e) {
+            e.preventDefault();
+
+            var minDate = $('#min').val();
+            var maxDate = $('#max').val();
+            var exportUrl = "logic/detail-laporan/xlshtml.php";
+
+            // Add date parameters if they exist
+            if (minDate && maxDate) {
+                exportUrl += "?start_date=" + minDate + "&end_date=" + maxDate;
+            } else if (minDate) {
+                // If only start date is provided, use it for both start and end
+                exportUrl += "?start_date=" + minDate + "&end_date=" + minDate;
+            }
+
+            // Redirect to the export URL
+            window.location.href = exportUrl;
+        });
+    });
+    $('#exportExcel').on('click', function(e) {
+        e.preventDefault();
+
+        var minDate = $('#min').val();
+        var maxDate = $('#max').val();
+        var exportUrl = "logic/detail-laporan/xlshtml.php";
+
+        // Add date parameters if they exist
+        if (minDate && maxDate) {
+            exportUrl += "?start_date=" + minDate + "&end_date=" + maxDate;
+        } else if (minDate) {
+            // If only start date is provided, use it for both start and end
+            exportUrl += "?start_date=" + minDate + "&end_date=" + minDate;
+        }
+
+        // Redirect to the export URL
+        window.location.href = exportUrl;
     });
 </script>
